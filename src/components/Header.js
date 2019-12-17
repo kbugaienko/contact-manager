@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
 
-function Header() {
+const Header = (props) => {
+    const { branding } = props;
     return (
         <div>
-            <h1>Contact Manager</h1>
+            <h1>{branding}</h1>
         </div>
     )
 }
