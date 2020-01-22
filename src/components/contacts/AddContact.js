@@ -5,60 +5,61 @@ import TextInputGroup from '../layout/TextInputGroup';
 import axios from 'axios';
 
 class AddContact extends Component {
-    state = {
-        name: '',
-        email: '',
-        phone: '',
-        errors: {}
+  state = {
+    name: '',
+    email: '',
+    phone: '',
+    errors: {}
+  };
+
+  onSubmit = async(dispatch, e) => {
+    e.preventDefault();
+
+    const { name, email, phone } = this.state;
+
+    // check for errors
+    if (name === '') {
+      this.setState({
+        errors: { name: "Name is required" }
+      });
+      return;
+    }
+
+    if (email === '') {
+      this.setState({
+        errors: { email: "Email is required" }
+      });
+      return;
+    }
+
+    if (phone === '') {
+      this.setState({
+        errors: { phone: "Phone is required" }
+      });
+      return;
+    }
+
+    const newContact = {
+      name,
+      email,
+      phone
     };
 
-    onSubmit = (dispatch, e) => {
-        e.preventDefault();
+    const res = await axios
+      .post('https://jsonplaceholder.typicode.com/users', newContact);
 
-        const { name, email, phone } = this.state;
+    dispatch({ type: 'ADD_CONTACT', payload: res.data });
 
-        // check for errors
-        if (name === '') {
-            this.setState({
-                errors: { name: "Name is required" }
-            });
-            return;
-        }
+    // clear state
+    this.setState({
+      name: '',
+      email: '',
+      phone: '',
+      errors: {}
+    });
 
-        if (email === '') {
-            this.setState({
-                errors: { email: "Email is required" }
-            });
-            return;
-        }
-
-        if (phone === '') {
-            this.setState({
-                errors: { phone: "Phone is required" }
-            });
-            return;
-        }
-
-        const newContact = {
-            name,
-            email,
-            phone
-        };
-
-        axios
-            .post('https://jsonplaceholder.typicode.com/users', newContact)
-            .then(res => dispatch({ type: 'ADD_CONTACT', payload: res.data }));
-
-        // clear state
-        this.setState({
-            name: '',
-            email: '',
-            phone: '',
-            errors: {}
-        });
-
-        this.props.history.push('/');
-    };
+    this.props.history.push('/');
+  };
 
     // change data in field of state
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
@@ -66,54 +67,53 @@ class AddContact extends Component {
     render() {
         const {name, email, phone, errors } = this.state;
 
-        return (
-            <Consumer>
-                {value => {
-                    const { dispatch } = value;
-                    return(
-                        <div className="card mb-3">
-                            <div className="card-header">Add Contact</div>
-                            <div className="card-body">
-                                <form onSubmit={this.onSubmit.bind(this, dispatch)}>
-                                    <TextInputGroup 
-                                        label="Name"
-                                        name="name"
-                                        placecholder="Enter Name"
-                                        value={name}
-                                        onChange={this.onChange}
-                                        error={errors.name}
-                                    />
-                                    <TextInputGroup 
-                                        label="Email"
-                                        name="email"
-                                        type="email"
-                                        placecholder="Enter Email"
-                                        value={email}
-                                        onChange={this.onChange}
-                                        error={errors.email}
-                                    />
-                                    <TextInputGroup 
-                                        label="Phone"
-                                        name="phone"
-                                        placecholder="Enter Phone"
-                                        value={phone}
-                                        onChange={this.onChange}
-                                        error={errors.phone}
-                                    />
-                                    
-                                    <input 
-                                        type="submit"
-                                        value="Add Contact"
-                                        className="btn btn-light btn-block"
-                                        />
-                                </form>
-                            </div>
-                        </div>
-                    )
-                }}
-            </Consumer>
-        )
-    }
+      return (
+        <Consumer>
+          {value => {
+            const { dispatch } = value;
+            return(
+              <div className="card mb-3">
+                <div className="card-header">Add Contact</div>
+                <div className="card-body">
+                  <form onSubmit={this.onSubmit.bind(this, dispatch)}>
+                    <TextInputGroup 
+                      label="Name"
+                      name="name"
+                      placecholder="Enter Name"
+                      value={name}
+                      onChange={this.onChange}
+                      error={errors.name}
+                    />
+                    <TextInputGroup 
+                      label="Email"
+                      name="email"
+                      type="email"
+                      placecholder="Enter Email"
+                      value={email}
+                      onChange={this.onChange}
+                      error={errors.email}
+                    />
+                    <TextInputGroup 
+                      label="Phone"
+                      name="phone"
+                      placecholder="Enter Phone"
+                      value={phone}
+                      onChange={this.onChange}
+                      error={errors.phone}
+                    />
+                    
+                    <input 
+                      type="submit"
+                      value="Add Contact"
+                      className="btn btn-light btn-block"/>
+                  </form>
+                </div>
+              </div>
+            )
+          }}
+        </Consumer>
+      )
+  }
 }
 
 export default AddContact;
