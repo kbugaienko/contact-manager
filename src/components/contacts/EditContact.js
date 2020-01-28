@@ -9,6 +9,7 @@ class EditContact extends Component {
     name: '',
     email: '',
     phone: '',
+    website: '',
     errors: {}
   };
 
@@ -21,14 +22,15 @@ class EditContact extends Component {
     this.setState({
       name: contact.name,
       email: contact.email,
-      phone: contact.phone
+      phone: contact.phone,
+      website: contact.website
     });
   }
 
   onSubmit = async(dispatch, e) => {
     e.preventDefault();
 
-    const { name, email, phone } = this.state;
+    const { name, email, phone, website } = this.state;
 
     // check for errors
     if (name === '') {
@@ -51,10 +53,19 @@ class EditContact extends Component {
       });
       return;
     }
+
+    if (website === '') {
+      this.setState({
+        errors: { website: "Website is required" }
+      });
+      return;
+    }
+
     const updContact = {
       name, 
       email,
-      phone
+      phone,
+      website
     }
   
     const { id } = this.props.match.params;
@@ -69,6 +80,7 @@ class EditContact extends Component {
       name: '',
       email: '',
       phone: '',
+      website: '',
       errors: {}
     });
 
@@ -79,7 +91,7 @@ class EditContact extends Component {
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
   render() {
-      const {name, email, phone, errors } = this.state;
+      const {name, email, phone, website, errors } = this.state;
 
     return (
       <Consumer>
@@ -114,6 +126,14 @@ class EditContact extends Component {
                     value={phone}
                     onChange={this.onChange}
                     error={errors.phone}
+                  />
+                  <TextInputGroup 
+                    label="Website"
+                    name="website"
+                    placecholder="Enter Website"
+                    value={website}
+                    onChange={this.onChange}
+                    error={errors.website}
                   />
                   
                   <input 
