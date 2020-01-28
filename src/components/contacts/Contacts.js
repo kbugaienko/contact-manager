@@ -17,8 +17,8 @@ class Contacts extends Component {
               {contacts.map(contact => (
               <Contact 
                 key={contact.id}
-                contact={contact}
-              />
+                contact={contact}>
+              </Contact>
               ))}
             </React.Fragment>
           )
