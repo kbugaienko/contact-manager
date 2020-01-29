@@ -8,12 +8,6 @@ import './contact.css';
 
 
 class Contact extends Component {
-  // the same way to declare propTypes
-  // static propTypes = {
-  //         name: PropTypes.string.isRequired,
-  //         email: PropTypes.string.isRequired,
-  //         phone: PropTypes.string.isRequired,
-  //     };
   state = {
     showContactInfo: false
   };
@@ -22,11 +16,6 @@ class Contact extends Component {
     // update our state
     this.setState({ showContactInfo: !this.state.showContactInfo });
   };
-
-  // onDeleteClick = (id, dispatch) => {
-  //     axios.delete(`https://jsonplaceholder.typicode.com/users/${id}`)
-  //         .then(res => dispatch({type:'DELETE_CONTACT', payload: id}));        
-  // };
 
   onDeleteClick = async(id, dispatch) => {
     try {
@@ -39,7 +28,7 @@ class Contact extends Component {
   };
   
   render(){
-    const { id, name, email, phone, website } = this.props.contact;
+    const { id, name, email, phone, website, address } = this.props.contact;
     const { showContactInfo } = this.state;
 
     return(
@@ -76,9 +65,25 @@ class Contact extends Component {
                 </Link>
               </h4>
               {showContactInfo ? (<ul className="list-group">
-                <li className="list-group-item">{email}</li>
-                <li className="list-group-item">{phone}</li>
-                <li className="list-group-item">{website}</li>
+                <li className="list-group-item">
+                  <p><i className='fas fa-envelope'></i> Email: {email}</p>
+                </li>
+                <li className="list-group-item">
+                    <p><i className='fas fa-phone'></i> Phone: {phone}</p>
+                </li>
+                <li className="list-group-item">
+                    <p><i className='fab fa-firefox-browser'></i> Website: {website}</p>
+                </li>
+                <li className="list-group-item">
+                    <p><i className='fas fa-address-card'></i> Address: 
+                      <address style={{ marginLeft: '6em' }}>
+                        <i>Street: {address.street}</i><br></br>
+                        <i>Suite: {address.suite}</i><br></br>
+                        <i>City: {address.city}</i><br></br>
+                        <i>ZipCode: {address.zipcode}</i>
+                      </address>
+                    </p>
+                </li>
               </ul>) : null}
             </div>
           )

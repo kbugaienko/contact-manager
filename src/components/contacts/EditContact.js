@@ -10,6 +10,10 @@ class EditContact extends Component {
     email: '',
     phone: '',
     website: '',
+    address_street: '',
+    address_suite: '',
+    address_city: '',
+    address_zipcode: '',
     errors: {}
   };
 
@@ -23,14 +27,26 @@ class EditContact extends Component {
       name: contact.name,
       email: contact.email,
       phone: contact.phone,
-      website: contact.website
+      website: contact.website,
+      address_street: contact.address.street,
+      address_suite: contact.address.suite,
+      address_city: contact.address.city,
+      address_zipcode: contact.address.zipcode
     });
   }
 
   onSubmit = async(dispatch, e) => {
     e.preventDefault();
 
-    const { name, email, phone, website } = this.state;
+    const { 
+      name,
+      email,
+      phone,
+      website,
+      address_street,
+      address_suite,
+      address_city,
+      address_zipcode } = this.state;
 
     // check for errors
     if (name === '') {
@@ -61,11 +77,45 @@ class EditContact extends Component {
       return;
     }
 
+    if (address_street === '') {
+      this.setState({
+        errors: { address_street: "Street is required" }
+      });
+      return;
+    }
+
+    if (address_suite === '') {
+      this.setState({
+        errors: { address_suite: "Suite is required" }
+      });
+      return;
+    }
+
+    if (address_city === '') {
+      this.setState({
+        errors: { address_city: "City is required" }
+      });
+      return;
+    }
+
+    if (address_zipcode === '') {
+      this.setState({
+        errors: { address_zipcode: "ZipCode is required" }
+      });
+      return;
+    }
+
     const updContact = {
       name, 
       email,
       phone,
-      website
+      website,
+      address: {
+        street: address_street,
+        suite: address_suite,
+        city: address_city,
+        zipcode: address_zipcode
+      }
     }
   
     const { id } = this.props.match.params;
@@ -81,6 +131,10 @@ class EditContact extends Component {
       email: '',
       phone: '',
       website: '',
+      address_street: '',
+      address_suite: '',
+      address_city: '',
+      address_zipcode: '',
       errors: {}
     });
 
@@ -88,10 +142,14 @@ class EditContact extends Component {
   };
 
   // change data in field of state
-  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  }
 
   render() {
-      const {name, email, phone, website, errors } = this.state;
+      const { name, email, phone, website, 
+        address_street, address_suite,
+        address_city, address_zipcode, errors } = this.state;
 
     return (
       <Consumer>
@@ -110,6 +168,7 @@ class EditContact extends Component {
                     onChange={this.onChange}
                     error={errors.name}
                   />
+
                   <TextInputGroup 
                     label="Email"
                     name="email"
@@ -127,6 +186,7 @@ class EditContact extends Component {
                     onChange={this.onChange}
                     error={errors.phone}
                   />
+
                   <TextInputGroup 
                     label="Website"
                     name="website"
@@ -135,7 +195,43 @@ class EditContact extends Component {
                     onChange={this.onChange}
                     error={errors.website}
                   />
-                  
+
+                  <TextInputGroup 
+                    label="Street"
+                    name="address_street"
+                    placecholder="Enter Street"
+                    value={address_street}
+                    onChange={this.onChange}
+                    error={errors.address_street}
+                  />
+
+                  <TextInputGroup 
+                    label='Suite'
+                    name="address_suite"
+                    placecholder="Enter Suite"
+                    value={address_suite}
+                    onChange={this.onChange}
+                    error={errors.address_suite}
+                  />
+
+                  <TextInputGroup 
+                    label='City'
+                    name="address_city"
+                    placecholder="Enter City"
+                    value={address_city}
+                    onChange={this.onChange}
+                    error={errors.address_city}
+                  />
+
+                  <TextInputGroup 
+                    label='ZipCode'
+                    name="address_zipcode"
+                    placecholder="Enter ZipCode"
+                    value={address_zipcode}
+                    onChange={this.onChange}
+                    error={errors.address_zipcode}
+                  />
+
                   <input 
                     type="submit"
                     value="Update Contact"
