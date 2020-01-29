@@ -219,7 +219,7 @@ class AddContact extends Component {
                     <input 
                       type="submit"
                       value="Add Contact"
-                      className="btn btn-light btn-block"/>
+                      className="btn btn-outline-success btn-block"/>
                   </form>
                 </div>
               </div>
